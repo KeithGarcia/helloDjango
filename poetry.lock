@@ -1,4 +1,4 @@
-[[package]]
+`[[package]]
 category = "main"
 description = "ASGI specs, helper code, and adapters"
 name = "asgiref"
