@@ -1,1 +1,16 @@
-<h1>Hello, World!</h1>
+<div class="container">
+    <h1>Hello, {{ welcome_name }}!</h1>
+    <ul>
+        {% for post in Recipes %}
+        <li>
+            <a href="/post/{{ post.id }}/">
+                {{ post.title }}</a> - by {{ post.author.name }} | {{ post.post_date }}
+            <ul>
+                <li>
+                    {{ post.body }}
+                </li>
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

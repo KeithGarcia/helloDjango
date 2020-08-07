@@ -1,0 +1,11 @@
+<div class="container">
+    {% if not post %}
+    <h1>this post doesn't exist</h1>
+    {% else %}
+    <h2>{{ post.title }}</h2>
+    <h4>{{ post.author.name }}</h4>
+    <p>{{ post.description }}</p>
+    <p>{{ post.time_required }}</p>
+    <p>{{ post.instructions }}</p>
+    {% endif %}
+</div>
