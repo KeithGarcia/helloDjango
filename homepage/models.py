@@ -14,12 +14,12 @@ class Author(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=50)
-    body = models.TextField()
     post_date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     name = models.CharField(default='', max_length=80)
     description = models.TextField(default='')
+    time_required = models.CharField(max_length=24, default='')
     instructions = models.TextField(default='')
 
     def __str__(self):
-        return f"{self.title} - {self.name}"
+        return f"{self.title} - {self.author.name}"
