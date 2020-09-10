@@ -1,17 +1,13 @@
 <div class="container">
-    <h1>Hello, {{ welcome_name }}!</h1>
-    <h2>Am I authenticated ? {{ request.user.is_authenticated }}</h2>
-    <ul>
-        {% for post in Recipes %}
-        <li>
-            <a href="/post/{{ post.id }}/">
-                {{ post.title }}</a> - by {{ post.author.name }} | {{ post.post_date }}
-            <ul>
-                <li>
-                    {{ post.description }}
-                </li>
-            </ul>
-        </li>
-        {% endfor %}
-    </ul>
+  <h1>Hello, {{ welcome_name }}!</h1>
+  <h2>Am I authenticated ? {{ request.user.is_authenticated }}</h2>
+  <ul>
+    {% for post in Recipes %}
+    <li>
+      <a href="/post/{{ post.id }}/"> {{ post.title }}</a> - by
+      <a href="author/{{post.author.name}}">{{ post.author.name }}</a> |
+      {{post.post_date}}
+    </li>
+    {% endfor %}
+  </ul>
 </div>

@@ -2,9 +2,9 @@ from django.shortcuts import render, HttpResponseRedirect, reverse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from django.views.generic import TemplateView
 from homepage.models import Recipe, Author
-from homepage.forms import RecipeForm, AuthorForm, LoginForm, SignupForm
+from homepage.forms import RecipeForm, AuthorForm, LoginForm, SignupForm, EditForm
 
 # Create your views here.
 
@@ -15,8 +15,18 @@ def index(request):
 
 
 def post_detail(request, post_id):
+    editbutton = False
+    isfav = False
     my_recipe = Recipe.objects.filter(id=post_id).first()
-    return render(request, "post_detail.html", {"post": my_recipe})
+    if request.user.is_staff:
+        editbutton = True
+    elif request.user == my_recipe.author.user:
+        editbutton = True
+
+    if request.user.is_authenticated:
+        if Author.objects.filter(user=request.user, favorites=my_recipe):
+            isfav = True
+    return render(request, "post_detail.html", {"post": my_recipe, "isfav": isfav, "editbutton": editbutton})
 
 
 @login_required
@@ -82,3 +92,37 @@ def signup_view(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("homepage"))
+
+
+class FavoriteView(TemplateView):
+    def get(self, request, post_id):
+
+        author = Author.objects.get(user=request.user)
+        author.favorites.add(Recipe.objects.get(id=post_id))
+        author.save()
+        return HttpResponseRedirect(f'/post/{post_id}')
+
+
+class EditView(TemplateView):
+    def get(self, request, post_id):
+        form = EditForm()
+        return render(request, "generic_form.html", {"form": form})
+
+    def post(self, request, post_id):
+        recipe = Recipe.objects.get(id=post_id)
+        form = EditForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            recipe.title = data.get("title")
+            recipe.description = data.get("description")
+            recipe.time_required = data.get("time_required")
+            recipe.instructions = data.get("instructions")
+            recipe.save()
+            return HttpResponseRedirect(f"/post/{post_id}")
+
+
+class AuthorView(TemplateView):
+    def get(self, request, author_name):
+        myauthor = Author.objects.get(name=author_name)
+        favs = myauthor.favorites.all()
+        return render(request, "author_detail.html", {"author": myauthor, "favs": favs})

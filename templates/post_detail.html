@@ -1,11 +1,18 @@
 <div class="container">
-    {% if not post %}
-    <h1>this post doesn't exist</h1>
-    {% else %}
-    <h2>{{ post.title }}</h2>
-    <h4>{{ post.author.name }}</h4>
-    <p>{{ post.description }}</p>
-    <p>{{ post.time_required }}</p>
-    <p>{{ post.instructions }}</p>
-    {% endif %}
+  {% if not post %}
+  <h1>this post doesn't exist</h1>
+  {% else %}
+
+  <h2>{{ post.title }}</h2>
+  <h4>{{ post.author.name }}</h4>
+  <p>{{ post.description }}</p>
+  <p>{{ post.time_required }}</p>
+  <p>{{ post.instructions }}</p>
+  {% endif %} {% if request.user.is_authenticated %}{% if not isfav %}
+  <a href="/favorite/{{post.id}}">favorite this post</a>{% else %}
+  <p>you've favorited this recipe</p>
+  {% endif %} {% endif %}
 </div>
+{% if editbutton %}
+<a href="/edit/{{post.id}}">Edit Post</a>
+{% endif %}

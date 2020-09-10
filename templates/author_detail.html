@@ -1,0 +1,12 @@
+<p>author page</a>
+<h1>{{author.name}}</h1>
+<h2>{{author.bio}}</h2>
+<p>favorite recipes:</p>
+<ul>
+{% for fav in favs %}
+<li>
+<a href="/post/{{fav.id}}">{{fav.title}}</a>
+</li>
+{% endfor %}
+</ul>
+
